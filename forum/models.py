@@ -19,11 +19,11 @@ class forum(models.Model):
 class topic(models.Model):
     id = models.AutoField(verbose_name='帖子编号', primary_key=True)
     creater = models.ForeignKey(user, on_delete=models.CASCADE, verbose_name='创建者')
+    pubForum = models.ForeignKey(forum, on_delete=models.CASCADE, verbose_name='创建论坛')
     title = models.CharField(verbose_name='标题', max_length=32)
     content = models.TextField(verbose_name='内容')
     created_time = models.DateTimeField(verbose_name='创贴时间', auto_now_add=True)
     tag = models.CharField(verbose_name='帖子分类', max_length=32)
-    like = models.IntegerField(verbose_name='点赞数', default=0)
     class Meta:
         db_table = 'forum_topic'
 

@@ -1,13 +1,12 @@
 from django.shortcuts import get_object_or_404, render
-from rest_framework import  viewsets
+from rest_framework import  viewsets, status
 from .serializers import userDetailSerializer, userSerializer
 from rest_framework.response import Response
-from rest_framework import status
 from .models import user
-from user import serializers
 
 
 # Create your views here.
+
 class userDetailViewSetList(viewsets.ViewSet):
 
     def list(self,request):
@@ -45,7 +44,7 @@ class userViewSetList(viewsets.ViewSet):
                 'msg': 'No Such User!',
                 'code': 404
             })
-        new_update = serializers.userSerializer(instance=oldUser,data=request.data,partial=False)
+        new_update = userSerializer(instance=oldUser,data=request.data,partial=False)
         new_update.is_valid(raise_exception=True)
         new_update.save()
         return Response({

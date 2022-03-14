@@ -16,7 +16,6 @@ class user(models.Model):
     userNo = models.CharField(verbose_name='用户编号', max_length=8, primary_key=True)
     nickname = models.CharField(verbose_name='昵称', max_length=30)
     sex = models.BooleanField(verbose_name='性别', null=True)
-    wx = models.CharField(verbose_name='微信号', max_length=32)
     email = models.EmailField(verbose_name='邮箱',null=True)
     intro = models.TextField(verbose_name='简介', default='')
     identity = models.CharField(verbose_name='身份', max_length=5)
