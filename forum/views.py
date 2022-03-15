@@ -2,7 +2,7 @@ from django.shortcuts import render
 from numpy import delete
 from rest_framework import viewsets, status
 from user import serializers
-from .serializers import forumCreateSerializer, forumListSerializer, topicSerializer, topicListSerializer, commentSerializer, commentListSerializer, membershipSerializer, memberListSerializer
+from .serializers import forumCreateSerializer, forumListSerializer, topicSerializer, topicListSerializer, commentSerializer, commentListSerializer, membershipSerializer
 from rest_framework.response import Response
 from .models import forum, topic, comment, membership
 from django.db.models import Q
