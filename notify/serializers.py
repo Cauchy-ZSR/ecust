@@ -1,6 +1,4 @@
-from django.dispatch import receiver
 from rest_framework import serializers
-
 from user.serializers import userClassSerializer
 from .models import pub_notice, notice_receive
 from user.models import user
