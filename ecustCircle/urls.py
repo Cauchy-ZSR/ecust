@@ -36,7 +36,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^userApi/',include('user.urls')),
     re_path(r'^forumApi/',include('forum.urls')),
-    re_path(r'^chatApi/',include('chat.urls')),
+    # re_path(r'^chatApi/',include('chat.urls')),
     re_path(r'^notifyInfoApi/',include('notify.urls')),
     path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger"),
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
