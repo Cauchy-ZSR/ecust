@@ -1,3 +1,4 @@
+from django.dispatch import receiver
 from django.shortcuts import render
 from .serializers import noticeSerializer, pub_noticeSerializer, noticeListSerializer
 from rest_framework import viewsets, status
@@ -15,7 +16,7 @@ class notifyPubViewSetList(viewsets.ViewSet):
         except len(publish)==0:
             return Response({
                 'code': 404,
-                'msg': 'Have not Publish!'
+                'msg': 'Have not Published!'
             })
         serializer = noticeSerializer(publish)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
@@ -29,3 +30,15 @@ class notifyPubViewSetList(viewsets.ViewSet):
             'msg': 'Successfully!',
             'code': 200
         })
+
+class notifyViewSetList(viewsets.ViewSet):
+    def retrieve(self,request,pk):
+        try:
+            queryset = notice_receive.objects.filter(receiver_userNo=pk)
+        except len(queryset)==0:
+            return Response({
+                'msg':'No notice!',
+                'code':201
+            })
+        serializer = noticeListSerializer(queryset)
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
