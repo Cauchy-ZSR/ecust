@@ -16,10 +16,10 @@ class userDetailViewSetList(viewsets.ViewSet):
 
     def retrieve(self, request, pk):
         try:
-            selectUser = user.objects.get(userNo=pk)
+            selectUser = user.objects.get(nickname=pk)
         except user.DoesNotExist:
             return Response({
-                'msg': 'NotFound!',
+                'msg': 'NO!',
                 'code': 404
             })
         serializer = userDetailSerializer(selectUser)
@@ -51,4 +51,4 @@ class userViewSetList(viewsets.ViewSet):
             'msg': 'Update successfully!',
             'code': 200
         })
-        
+    
