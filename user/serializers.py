@@ -1,20 +1,13 @@
 from rest_framework import serializers
-from  .models import user, userClass
-
-
-class userClassSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = userClass
-        fields = "__all__"
+from  .models import user
 
 class userSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = user
-        fields = "__all__"
+        fields = ('userNo', 'nickname', 'sex', 'email', 'identity')
 
 class userDetailSerializer(serializers.ModelSerializer):
-    userClass = userClassSerializer()
     class Meta:
         # 需要序列化的模型
         model = user

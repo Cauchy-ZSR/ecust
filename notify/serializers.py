@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from user.serializers import userClassSerializer
 from .models import pub_notice, notice_receive
 from user.models import user
+from user.serializers import userSerializer
 
 
 class noticeSerializer(serializers.ModelSerializer):
-    sender = userClassSerializer()
+    sender = userSerializer()
     class Meta:
         model = pub_notice
         fields = "__all__"
@@ -16,7 +16,7 @@ class pub_noticeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class noticeListSerializer(serializers.ModelSerializer):
-    receiver = userClassSerializer()
+    receiver = userSerializer()
     notice = noticeSerializer()
     class Meta:
         model = notice_receive

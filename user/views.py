@@ -29,6 +29,7 @@ class userViewSetList(viewsets.ViewSet):
 
     def create(self, request):
         serializer = userSerializer(data=request.data)
+        print(request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({
