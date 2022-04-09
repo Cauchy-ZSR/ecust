@@ -27,6 +27,25 @@ class userDetailViewSetList(viewsets.ViewSet):
 
 class userViewSetList(viewsets.ViewSet):
 
+    def retrieve(self, request, pk):
+        password=request.data['password']
+        try:
+            user = user.objects.get(userNo=pk)
+        except user.DoesNotExist:
+            return Response({
+                'msg':"账号或密码有误！", 
+                'code': 404
+                })
+        if password==user.password:
+            serializer=userDetailSerializer(user)
+            return Response(status=status.HTTP_200_OK, data=serializer.data)
+        else:
+            return Response({
+               'msg':"账号或密码有误！", 
+                'code': 404 
+            })
+
+
     def create(self, request):
         serializer = userSerializer(data=request.data)
         print(request.data)
