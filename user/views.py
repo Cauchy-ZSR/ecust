@@ -16,7 +16,7 @@ class userDetailViewSetList(viewsets.ViewSet):
 
     def retrieve(self, request, pk):
         try:
-            selectUser = user.objects.get(nickname=pk)
+            selectUser = user.objects.get(userNo=pk)
         except user.DoesNotExist:
             return Response({
                 'msg': 'NO!',

@@ -38,9 +38,45 @@ class forumViewSetList(viewsets.ViewSet):
 class forumDetailViewSetList(viewsets.ViewSet):
 
     def list(self, request):
-        queryset = forum.objects.all()
-        serializer = forumListSerializer(queryset, many=True)
-        return Response(status=status.HTTP_200_OK, data=serializer.data)
+        queryset1 = forum.objects.filter(tag="课程学习")
+        queryset2 = forum.objects.filter(tag="考研保研")
+        queryset3 = forum.objects.filter(tag="大创科研")
+        queryset4 = forum.objects.filter(tag="竞赛前瞻")
+        queryset5 = forum.objects.filter(tag="兴趣圈子")
+        serializer1=forumListSerializer(queryset1, many=True)
+        serializer2=forumListSerializer(queryset2, many=True)
+        serializer3=forumListSerializer(queryset3, many=True)
+        serializer4=forumListSerializer(queryset4, many=True)
+        serializer5=forumListSerializer(queryset5, many=True)
+        response = {
+            'code':200,
+            'msg':"Success!",
+            'data':{
+                '1':{
+                    'classname':"课程学习",
+                    'children':serializer1.data
+                },
+                '2':{
+                    'classname':"考研保研",
+                    'children':serializer2.data
+                },
+                '3':{
+                    'classname':"大创科研",
+                    'children':serializer3.data
+                },
+                '4':{
+                    'classname':"竞赛前瞻",
+                    'children':serializer4.data
+                },
+                '5':{
+                    'classname':"兴趣圈子",
+                    'children':serializer5.data
+                }
+            }
+        }
+        
+        return Response(response)
+
 
     def retrieve(self,request,pk):
         try:
@@ -156,3 +192,8 @@ class membershipViewSet(viewsets.ViewSet):
                 'msg': 'Unexpected error!'
             })
         membership.objects.filter(Q(m_forum=request.data[0]), Q(m_user=request.data[1])).delete()
+        return Response({
+            'code':200,
+            'msg':"Success!"
+        })
+        
