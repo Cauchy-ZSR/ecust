@@ -2,6 +2,7 @@ from .serializers import noticeSerializer, pub_noticeSerializer, noticeListSeria
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import pub_notice, notice_receive
+from forum.models import membership
 
 # Create your views here.
 
@@ -23,6 +24,13 @@ class notifyPubViewSetList(viewsets.ViewSet):
         serializer1 = pub_noticeSerializer(data=request.data)
         serializer1.is_valid(raise_exception=True)
         serializer1.save()
+        # 再在接收表中插入
+        new_notice = pub_notice.objects.filter(range_id=request.data['range']).last()
+        noticeID=new_notice.id
+        members = membership.objects.filter(m_forum_id=request.data['range'])
+        for member in members:
+            create = notice_receive.objects.create(notice=noticeID,receiver=member.m_user)
+            create.save()
         
         return Response({
             'msg': 'Successfully!',

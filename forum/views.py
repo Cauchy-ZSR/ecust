@@ -5,11 +5,13 @@ from user import serializers
 from .serializers import forumCreateSerializer, forumListSerializer, topicSerializer, topicListSerializer, commentSerializer, commentListSerializer, membershipSerializer
 from rest_framework.response import Response
 from .models import forum, topic, comment, membership
+from user.models import user
 from django.db.models import Q
 # Create your views here.
 class forumViewSetList(viewsets.ViewSet):
 
     def create(self,request):
+        print(request.data)
         serializer = forumCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -53,22 +55,27 @@ class forumDetailViewSetList(viewsets.ViewSet):
             'msg':"Success!",
             'data':{
                 '1':{
+                    'id':1,                   
                     'classname':"课程学习",
                     'children':serializer1.data
                 },
                 '2':{
+                    'id':2,
                     'classname':"考研保研",
                     'children':serializer2.data
                 },
                 '3':{
+                    'id':3,
                     'classname':"大创科研",
                     'children':serializer3.data
                 },
                 '4':{
+                    'id':4,
                     'classname':"竞赛前瞻",
                     'children':serializer4.data
                 },
                 '5':{
+                    'id':5,
                     'classname':"兴趣圈子",
                     'children':serializer5.data
                 }
@@ -92,6 +99,7 @@ class forumDetailViewSetList(viewsets.ViewSet):
 class topicViewSetList(viewsets.ViewSet):
 
     def create(self,request):
+        print(request.data)
         serializer = topicSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -121,19 +129,20 @@ class topicDetailViewSet(viewsets.ViewSet):
                 'code': 401,
                 'msg': 'Unexpected error!'
             })
-        serializer = topicListSerializer(queryset, many=True)
+        serializer = topicListSerializer(queryset)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
     
 class commentViewSet(viewsets.ViewSet):
 
     def create(self, request):
+        print(request.data)
         serializer = commentSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({
-            'code': 200,
-            'msg': 'Created successfully!'
-        })
+        topic = request.data['topicComment']
+        queryset = comment.objects.filter(topicComment_id=topic)
+        serializer = commentListSerializer(queryset, many=True)
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
 
     def delete(self,request,pk):
         try:
@@ -158,14 +167,59 @@ class commentDetailViewSet(viewsets.ViewSet):
             })
         serializer = commentListSerializer(queryset, many=True)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
+
+    def retrieve(self,request,pk):
+
+        querysets = comment.objects.filter(puber_id=pk)
+        for queryset in querysets:
+            if queryset.is_read==False:
+                return Response({
+                    'code':201
+                })
+        return Response({
+            'code':200
+        })
+
+class commentIsReadViewSet(viewsets.ViewSet):
+
+    def list(self,request,pk):
+        try:
+            querysets = comment.objects.filter(puber_id=pk)
+        except len(querysets)==0:
+            return Response({
+                'code':200,
+                'msg':'No news!'
+            })
+        serializer = commentListSerializer(querysets,many=True)
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
     
 class membershipViewSet(viewsets.ViewSet):
 
     def create(self,request):
-        serializer = membershipSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(status=status.HTTP_200_OK)
+        forumID = request.data['postid']
+        follow = request.data['userid']
+        following = forum.objects.get(id=forumID)
+        follower = user.objects.get(userNo=follow)
+        queryset = membership.objects.create(m_forum=following, m_user=follower)
+        queryset.save()
+        return Response({
+            'code':200
+        })
+
+    def retrieve(self,request):
+
+        try:
+            ship=membership.objects.get(m_user_id=request.data['m_user'],m_forum_id=request.data['m_forum'])
+        except membership.DoesNotExist:
+            return Response({
+                'code':201,
+                'msg':"Not!"
+            })
+        return Response({
+            'code':200,
+            'msg':"Yes!"
+        })
+
     
     def update(self,request):
         try:
@@ -185,7 +239,7 @@ class membershipViewSet(viewsets.ViewSet):
     
     def delete(self,request):
         try:
-            old = membership.objects.get(Q(m_forum=request.data[0]), Q(m_user=request.data[1]))
+            old = membership.objects.get(Q(m_forum_id=request.data['postid']), Q(m_user_id=request.data['userid']))
         except membership.DoesNotExist:
             return Response({
                 'code': 401,
@@ -193,7 +247,6 @@ class membershipViewSet(viewsets.ViewSet):
             })
         membership.objects.filter(Q(m_forum=request.data[0]), Q(m_user=request.data[1])).delete()
         return Response({
-            'code':200,
+            'code':201,
             'msg':"Success!"
         })
-        

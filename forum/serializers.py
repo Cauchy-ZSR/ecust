@@ -15,13 +15,13 @@ class forumCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = forum
-        fields = "__all__"
+        fields = ('name', 'intro', 'tag', 'creater')
 
 class topicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = topic
-        fields = "__all__"
+        fields = ('creater', 'pubForum', 'title', 'content', 'tag')
 
 class topicListSerializer(serializers.ModelSerializer):
 
@@ -31,10 +31,10 @@ class topicListSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class commentSerializer(serializers.ModelSerializer):
-
+    topicComment = topicSerializer()
     class Meta:
         model = comment
-        fields = "__all__"
+        fields = ('puber', 'topicComment', 'content')
 
 class commentListSerializer(serializers.ModelSerializer):
     puber = userDetailSerializer()
@@ -45,5 +45,5 @@ class commentListSerializer(serializers.ModelSerializer):
 class membershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = membership
-        fields = "__all__"
+        fields = ('m_forum', 'm_user')
 

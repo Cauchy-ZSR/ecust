@@ -23,7 +23,7 @@ class topic(models.Model):
     title = models.CharField(verbose_name='标题', max_length=32)
     content = models.TextField(verbose_name='内容')
     created_time = models.DateTimeField(verbose_name='创贴时间', auto_now_add=True)
-    tag = models.CharField(verbose_name='帖子分类', max_length=32)
+    tag = models.CharField(verbose_name='帖子分类', max_length=32, null=True)
     class Meta:
         db_table = 'forum_topic'
 
@@ -34,6 +34,7 @@ class comment(models.Model):
     created_time = models.DateTimeField(verbose_name='评论时间', auto_now_add=True)
     topicComment = models.ForeignKey(topic, on_delete=models.CASCADE, verbose_name='评论对象')
     is_read = models.BooleanField(verbose_name='是否已读', default=False)
+    content = models.CharField(verbose_name='评论内容', max_length=200)
     class Meta:
         db_table='forum_comment'
 
