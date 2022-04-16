@@ -47,3 +47,9 @@ class membershipSerializer(serializers.ModelSerializer):
         model = membership
         fields = ('m_forum', 'm_user')
 
+class commentCreateSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = comment
+        fields = ('puber', 'topicComment', 'content')
+        

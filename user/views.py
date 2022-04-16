@@ -64,6 +64,7 @@ class userViewSetList(viewsets.ViewSet):
                 'msg': 'No Such User!',
                 'code': 404
             })
+        print(request.data)
         new_update = userSerializer(instance=oldUser,data=request.data,partial=False)
         new_update.is_valid(raise_exception=True)
         new_update.save()

@@ -15,7 +15,7 @@ class pub_notice(models.Model):
 
 class notice_receive(models.Model):
     notice = models.ForeignKey(pub_notice, on_delete=models.CASCADE, verbose_name='通知编号')
-    reveiver = models.ForeignKey(user, on_delete=models.CASCADE, verbose_name='接收人')
+    receiver = models.ForeignKey(user, on_delete=models.CASCADE, verbose_name='接收人')
     is_read = models.BooleanField(verbose_name='是否已读', default=False)
     class Meta:
         db_table = 'notify_notice_receive'

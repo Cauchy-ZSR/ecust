@@ -15,7 +15,8 @@ urlpatterns = [
     re_path(r'^comment/delete/(?P<pk>\d+)', commentViewSet.as_view({'delete': 'delete'})),
     re_path(r'^comment/is_read/(?P<pk>\d+)', commentDetailViewSet.as_view({'get': 'retrieve'})),
     re_path(r'^comment/detail/is_read/(?P<pk>\d+)', commentIsReadViewSet.as_view({'get': 'list'})),
-    re_path(r'^membership/check/$', membershipViewSet.as_view({'get': 'retrieve'})),
+    re_path(r'^comment/is_read/update/(?P<pk>\d+)', commentIsReadViewSet.as_view({'get': 'retrieve'})),
+    re_path(r'^membership/check/$', membershipViewSet.as_view({'post': 'retrieve'})),
     re_path(r'^membership/create/$', membershipViewSet.as_view({'post': 'create'})),
     re_path(r'^membership/delete/$', membershipViewSet.as_view({'delete': 'delete'})),
 ]

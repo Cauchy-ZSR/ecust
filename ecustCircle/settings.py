@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-ey80w=awhr_ru6%d19b71tl7w#t@x5+m0b0bfvjtt3rtol77%#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -87,9 +87,9 @@ WSGI_APPLICATION = 'ecustCircle.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'circle',
+        'NAME': 'ecustCircle',
         'USER': 'root',
-        'PASSWORD': '03224313@zsr',
+        'PASSWORD': 'Allout@1251',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
