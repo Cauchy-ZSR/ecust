@@ -1,5 +1,3 @@
-from symtable import Class
-from attr import field
 from rest_framework import serializers
 from .models import forum, topic, comment, membership
 from user.serializers import userDetailSerializer
