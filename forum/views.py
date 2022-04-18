@@ -180,7 +180,7 @@ class commentIsReadViewSet(viewsets.ViewSet):
 
     def list(self,request,pk):
         try:
-            querysets = comment.objects.filter(topicComment_creater_id=pk)
+            querysets = comment.objects.filter(topicComment_creater_userNo=pk)
         except querysets.count()==0:
             return Response({
                 'code':200,
