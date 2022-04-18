@@ -155,13 +155,13 @@ class commentDetailViewSet(viewsets.ViewSet):
 
     def list(self,request,pk):
         try:
-            queryset = comment.objects.filter(topicComment=pk)
-        except  queryset.count()==0:
+            querysets = comment.objects.filter(topicComment_creater_id=pk)
+        except  querysets.count()==0:
             return Response({
                 'code': 201,
                 'msg': 'No comment currently!'
             })
-        serializer = commentListSerializer(queryset, many=True)
+        serializer = commentListSerializer(querysets, many=True)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
 
     def retrieve(self,request,pk):
