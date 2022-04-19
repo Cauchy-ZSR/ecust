@@ -155,7 +155,7 @@ class commentDetailViewSet(viewsets.ViewSet):
 
     def list(self,request,pk):
         try:
-            querysets = comment.objects.filter(topicComment_creater_id=pk)
+            querysets = comment.objects.filter(topicComment_id=pk)
         except  querysets.count()==0:
             return Response({
                 'code': 201,
@@ -179,24 +179,22 @@ class commentDetailViewSet(viewsets.ViewSet):
 class commentIsReadViewSet(viewsets.ViewSet):
 
     def list(self,request,pk):
-        try:
-            querysets = comment.objects.filter(topicComment_creater_userNo=pk)
-        except querysets.count()==0:
-            return Response({
-                'code':200,
-                'msg':'No news!'
-            })
+        sql = "select * from forum_comment,forum_topic where topicComment_id=forum_topic.id and forum_topic.creater_id=%s and puber_id<>%s"
+
+        querysets = comment.objects.raw(sql,[pk,pk])
+
         serializer = commentListSerializer(querysets,many=True)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
     
     def retrieve(self,request,pk):
-        querysets = comment.objects.filter(topicComment_id=pk)
-        if querysets.count()==0:
-            return Response({
-                'code':200,
-                'msg':'No news!'
-            })    
-        querysets.update(is_read=True)
+        topicor = topic.objects.get(id=pk).creater
+        if request.data['userNo']==topicor.userNo:
+            querysets = comment.objects.filter(topicComment_id=pk)
+            for queryset in querysets:
+                if queryset.is_read==False:
+                    querysets.update(is_read=True)
+                    return Response(status=status.HTTP_200_OK)
+        
         return Response(status=status.HTTP_200_OK)
     
 class membershipViewSet(viewsets.ViewSet):
